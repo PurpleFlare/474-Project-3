@@ -29,7 +29,7 @@ class NBC(BaseEstimator):
     # you need to implement this function
 
     def fit(self,X,y):
-        '''
+ 
         This function does not return anything
         
         Inputs:
@@ -40,21 +40,35 @@ class NBC(BaseEstimator):
         b = self.get_b()
         alpha = self.get_alpha()
         self.__classes = np.unique(y)
+        params = {}
 
         # remove next line and implement from here
         # you are free to use any data structure for paramse
-        int i = 0
-        int yes = 0
-        int no = 0
-        for i in Labels:
-            if Labels.at(i) == 1 :
-                yes++
+        i = 0
+        yes = 0
+        no = 0
+        for i in range y.shape[0]:
+            if y.at(i) == 1 :
+                yes = yes +1
             else:
-                no++
-        bayes1 = (yes + a) / (Labels.size + a + b)
+                no = no + 1
+        bayes1 = (yes + a) / (y.size + a + b)
         bayes2 = 1 - bayes1
-        
-        params = None 
+        params["y=1"] = bayes1
+        params["y=2"] = bayes2
+        j = 1
+        for j in range X.shape[1]:
+            #the Kj value
+            temp = np.unique(X.at(j))
+            s = 0
+            for k in range temp.shape[0]
+                temp1 = np.where(X[j] == temp[k])
+                temp2 = np.where(y == 1) 
+                temp3 = np.intersect(temp1, temp2) 
+                prob = temp3.size / temp1.size
+                s = prob
+                total = (s + alpha)  / (yes + temp.size*alpha)
+                params["X =" + j + " | y = 1"] = total 
         # do not change the line below
         self.__params = params
     
@@ -91,7 +105,23 @@ def evaluateBias(y_pred,y_sensitive):
     di (disparateimpact): scalar value
     '''
     #remove next line and implement from here
-    di = 0
+    int i = 0
+    #getting value with bad credit
+    int y2
+    for i in y_pred:
+        if y_pred.at(i) == 2:
+            y2 += 1
+    #get unprivileged value from y_sensitive
+    int j = 0
+    int sucks2Bme
+    int imOKtho
+    for j in y_sensitive:
+        if y_sensitive.at(i) == 2:
+            sucks2Bme += 1
+        else:
+            imOKtho += 1
+    
+    di = (y2 * imOKtho) / (y2 * sucks2Bme)
     
     #do not change the line below
     return di

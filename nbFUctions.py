@@ -43,35 +43,24 @@ class NBC(BaseEstimator):
         params = {}
         # remove next line and implement from here
         # you are free to use any data structure for paramse
-        #i = 0
-        #yes = 0
-        #no = 0
-        #for i in range y.shape[0]:
-        #    if y.at(i) == 1 :
-        #        yes = yes +1
-        #    else:
-        #        no = no + 1
-        #bayes1 = (yes + a) / (y.size + a + b)
-        #bayes2 = 1 - bayes1
-        #params["y=1"] = bayes1
-        #params["y=2"] = bayes2
         
-        for i in range y.size-1:
-        oneValues = np.where(y[i]==1)
-        twoValues = np.where(y[i]==2)
+        oneValues = np.count_nonzero(y == 1)
+        twoValues = np.count_nonzero(y == 2)
         
-        theta1 = (oneValues + a) / (y.size + a + b)
+        
+        theta1 = (oneValue + a) / (y.size + a + b)
         theta2 = 1 - theta1
-        
         params["y=1"] = theta1
-        params["y=2"] = theta2
-
+        params["y=2"] = theta2        
         
         
-        for j in range X.shape[1]:
+        for j in range (X.shape[1]):
             #the Kj value
-            temp = np.unique(X.at(j))
-            for k in range temp.shape[0]
+            temp = np.unique(X[j])
+            for k in range (temp.shape[0]):
+                
+                var = temp[k]
+                
                 temp1 = np.where(X[j] == temp[k])
                 temp2 = np.where(y == 1) 
                 temp4 = np.where(y == 2)
@@ -84,12 +73,12 @@ class NBC(BaseEstimator):
                 total1 = (prob1 + alpha)  / (oneValues + temp.size*alpha)
                 total2 = (prob2 + alpha) / (twoValues + temp.size*alpha)
                 
-                params["X =" + j + " | y = 1"] = total1    
-                params["X =" + j + " | y = 2"] = total2
+                params["X =" + var + " | y = 1"] = total1    
+                params["X =" + var + " | y = 2"] = total2
         # do not change the line below
         self.__params = params
     
-    # you need to implement this function
+   # you need to implement this function
     def predict(self,Xtest):
         '''
         This function returns the predicted class for a given data set
@@ -114,11 +103,11 @@ class NBC(BaseEstimator):
             #find given product of Xj when y = 1 and y= 2
             temp = np.unique(Xtest[j])
             k = 1
-            hgn = temp.at(0)
+            hgn = temp[0]
             productYes = params["X= " + hgn + " | y = 1"]
             productNo = params["X= " + hgn + " | y = 2"]
             for k in range (temp):
-                var = temp.at(k)
+                var = temp[k]
                 productYes = productYes * params["X= " + hgn + " | y = 1"]
                 productNo = prodcuctNo * params["X= " + hgn + " | y = 2"]
             
@@ -145,17 +134,17 @@ def evaluateBias(y_pred,y_sensitive):
     di (disparateimpact): scalar value
     '''
     #remove next line and implement from here
-    int i = 0
+    i = 0
     #getting value with bad credit
-    int y2
-    for i in y_pred:
+    y2 = 0
+    for i in range (y_pred):
         if y_pred.at(i) == 2:
             y2 += 1
     #get unprivileged value from y_sensitive
-    int j = 0
-    int sucks2Bme
-    int imOKtho
-    for j in y_sensitive:
+    j = 0
+    sucks2Bme = 0
+    imOKtho = 0
+    for j in (y_sensitive):
         if y_sensitive.at(i) == 2:
             sucks2Bme += 1
         else:

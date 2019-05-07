@@ -60,15 +60,21 @@ class NBC(BaseEstimator):
         for j in range X.shape[1]:
             #the Kj value
             temp = np.unique(X.at(j))
-            s = 0
             for k in range temp.shape[0]
                 temp1 = np.where(X[j] == temp[k])
                 temp2 = np.where(y == 1) 
-                temp3 = np.intersect(temp1, temp2) 
-                prob = temp3.size / temp1.size
-                s = prob
-                total = (s + alpha)  / (yes + temp.size*alpha)
-                params["X =" + j + " | y = 1"] = total 
+                temp4 = np.where(y == 2)
+                temp3 = np.intersect(temp1, temp2)
+                temp5 = np.intersect(temp1, temp4)
+                
+                prob1 = temp3.size / temp1.size
+                prob2 = temp5.size / temp1.size
+                
+                total1 = (prob1 + alpha)  / (yes + temp.size*alpha)
+                total2 = (prob2 + alpha) / (no + temp.size*alpha)
+                
+                params["X =" + j + " | y = 1"] = total1    
+                params["X =" + j + " | y = 2"] = total2
         # do not change the line below
         self.__params = params
     

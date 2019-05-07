@@ -29,7 +29,7 @@ class NBC(BaseEstimator):
     # you need to implement this function
 
     def fit(self,X,y):
- 
+        '''
         This function does not return anything
         
         Inputs:
@@ -41,22 +41,33 @@ class NBC(BaseEstimator):
         alpha = self.get_alpha()
         self.__classes = np.unique(y)
         params = {}
-
         # remove next line and implement from here
         # you are free to use any data structure for paramse
-        i = 0
-        yes = 0
-        no = 0
-        for i in range y.shape[0]:
-            if y.at(i) == 1 :
-                yes = yes +1
-            else:
-                no = no + 1
-        bayes1 = (yes + a) / (y.size + a + b)
-        bayes2 = 1 - bayes1
-        params["y=1"] = bayes1
-        params["y=2"] = bayes2
-        j = 1
+        #i = 0
+        #yes = 0
+        #no = 0
+        #for i in range y.shape[0]:
+        #    if y.at(i) == 1 :
+        #        yes = yes +1
+        #    else:
+        #        no = no + 1
+        #bayes1 = (yes + a) / (y.size + a + b)
+        #bayes2 = 1 - bayes1
+        #params["y=1"] = bayes1
+        #params["y=2"] = bayes2
+        
+        for i in range y.size-1:
+        oneValues = np.where(y[i]==1)
+        twoValues = np.where(y[i]==2)
+        
+        theta1 = (oneValues + a) / (y.size + a + b)
+        theta2 = 1 - theta1
+        
+        params["y=1"] = theta1
+        params["y=2"] = theta2
+
+        
+        
         for j in range X.shape[1]:
             #the Kj value
             temp = np.unique(X.at(j))
@@ -70,8 +81,8 @@ class NBC(BaseEstimator):
                 prob1 = temp3.size / temp1.size
                 prob2 = temp5.size / temp1.size
                 
-                total1 = (prob1 + alpha)  / (yes + temp.size*alpha)
-                total2 = (prob2 + alpha) / (no + temp.size*alpha)
+                total1 = (prob1 + alpha)  / (oneValues + temp.size*alpha)
+                total2 = (prob2 + alpha) / (twoValues + temp.size*alpha)
                 
                 params["X =" + j + " | y = 1"] = total1    
                 params["X =" + j + " | y = 2"] = total2
@@ -131,7 +142,6 @@ def evaluateBias(y_pred,y_sensitive):
     
     #do not change the line below
     return di
-
 def genBiasedSample(X,y,s,p,nsamples=1000):
     '''
     Oversamples instances belonging to the sensitive feature value (s != 1)
@@ -155,7 +165,6 @@ def genBiasedSample(X,y,s,p,nsamples=1000):
     sp = sp[:,np.newaxis]
     su = s != 1 #unprivileged
     su = su[:,np.newaxis]
-
     su1 = np.where(np.all(np.hstack([su,i1]),axis=1))[0]
     su2 = np.where(np.all(np.hstack([su,i2]),axis=1))[0]
     sp1 = np.where(np.all(np.hstack([sp,i1]),axis=1))[0]

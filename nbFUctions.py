@@ -46,35 +46,42 @@ class NBC(BaseEstimator):
         
         oneValues = np.count_nonzero(y == 1)
         twoValues = np.count_nonzero(y == 2)
-        
-        
+    
         theta1 = (oneValue + a) / (y.size + a + b)
         theta2 = 1 - theta1
-        params["y=1"] = theta1
-        params["y=2"] = theta2        
         
+        thetaTuple = (theta1, theta2)
+
+        j = 1
+        list_att = []
+        list_prob = {}
+        list_N = {}
+        for j in range(X.shape[1]):
+            dic_att.append(Counter(X[j]))
+            myList = Counter(X[j]).keys()
+            kJ = np.unique(X[j]).size
+            for k in range (myList.size):
+                prob = 0
+                prob2 = 0
+                s = 0
+                for l in range (X.shape[0]):
+                    if myList[k] == X[l][j] && y[l] == 1:
+                        s = s + 1
+                    #elif myList[k] == X[l][j]      
+                otherList = Counter(X[j]).values()
+                prob = s / otherList[k]  #Nj
+                prob2 = 1 - prob
+                temp = (prob, prob2)
+                list_N[otherList[k]] = temp
+                ans1 = (prob + alpha) / (oneValues + kJ*alpha)
+                ans2 = (prob2 + alpha) / (twoValues + kJ*alpha)
+                temp1 = (ans1, ans2)
+                list_prob[otherList[k]] = temp1
+                
         
-        for j in range (X.shape[1]):
-            #the Kj value
-            temp = np.unique(X[j])
-            for k in range (temp.shape[0]):
-                
-                var = temp[k]
-                
-                temp1 = np.where(X[j] == temp[k])
-                temp2 = np.where(y == 1) 
-                temp4 = np.where(y == 2)
-                temp3 = np.intersect(temp1, temp2)
-                temp5 = np.intersect(temp1, temp4)
-                
-                prob1 = temp3.size / temp1.size
-                prob2 = temp5.size / temp1.size
-                
-                total1 = (prob1 + alpha)  / (oneValues + temp.size*alpha)
-                total2 = (prob2 + alpha) / (twoValues + temp.size*alpha)
-                
-                params["X =" + var + " | y = 1"] = total1    
-                params["X =" + var + " | y = 2"] = total2
+        params = {thetaTuple, list_prob}        
+        
+        self.__params = params
         # do not change the line below
         self.__params = params
     

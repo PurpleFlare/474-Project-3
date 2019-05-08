@@ -51,37 +51,47 @@ class NBC(BaseEstimator):
         theta2 = 1 - theta1
         
         thetaTuple = (theta1, theta2)
-
-        j = 1
+j = 1
         list_att = []
         list_prob = {}
-        list_N = {}
+        list_Y1 = {}
+        list_Y2 = {}
         for j in range(X.shape[1]):
-            dic_att.append(Counter(X[j]))
+            list_Y1[j] = {}
+            list_Y2[j] = {}
+            #list_att.append(Counter(X[j]))
             myList = Counter(X[j]).keys()
+            otherList = {}
+            print(myList)
+            print(Counter(X[j]).values())
+            print(Counter(X[j]))
             kJ = np.unique(X[j]).size
-            for k in range (myList.size):
+            print(kJ)
+            for k in range (1, kJ):
                 prob = 0
                 prob2 = 0
                 s = 0
+                #print(k)
                 for l in range (X.shape[0]):
-                    if myList[k] == X[l][j] && y[l] == 1:
+                    if k == X[l][j] and y[l] == 1:
                         s = s + 1
                     #elif myList[k] == X[l][j]      
-                otherList = Counter(X[j]).values()
-                prob = s / otherList[k]  #Nj
+                otherList = Counter(X[j])
+                #print(otherList)
+                prob = s / otherList[k] #Nj
                 prob2 = 1 - prob
-                temp = (prob, prob2)
-                list_N[otherList[k]] = temp
+                #temp = (prob, prob2)
+                #list_N[otherList[k]] = temp
                 ans1 = (prob + alpha) / (oneValues + kJ*alpha)
                 ans2 = (prob2 + alpha) / (twoValues + kJ*alpha)
                 temp1 = (ans1, ans2)
-                list_prob[otherList[k]] = temp1
-                
+                #list_prob[otherList[k]] = temp1
+                list_Y1[j][k] = ans1
+                list_Y2[j][k] = ans2
         
-        params = {thetaTuple, list_prob}        
-        
-        self.__params = params
+        #params = (thetaTuple, list_prob)
+        params = (thetaTuple, list_Y1, list_Y2)
+       
         # do not change the line below
         self.__params = params
     

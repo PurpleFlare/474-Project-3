@@ -51,43 +51,54 @@ class NBC(BaseEstimator):
         theta2 = 1 - theta1
         
         thetaTuple = (theta1, theta2)
-j = 1
+        j = 1
         list_att = []
         list_prob = {}
         list_Y1 = {}
         list_Y2 = {}
+      
         for j in range(X.shape[1]):
             list_Y1[j] = {}
             list_Y2[j] = {}
             #list_att.append(Counter(X[j]))
             myList = Counter(X[j]).keys()
             otherList = {}
-            print(myList)
-            print(Counter(X[j]).values())
-            print(Counter(X[j]))
             kJ = np.unique(X[j]).size
-            print(kJ)
+            #print(kJ)
             for k in range (1, kJ):
                 prob = 0
                 prob2 = 0
                 s = 0
+                #print("in range k")
                 #print(k)
+                temp = np.unique(X[j])
+                #print(temp)
                 for l in range (X.shape[0]):
-                    if k == X[l][j] and y[l] == 1:
+                    if temp[k-1] == X[l][j] and y[l] == 1:
                         s = s + 1
                     #elif myList[k] == X[l][j]      
                 otherList = Counter(X[j])
+                print("this is s")
+                print(s)
                 #print(otherList)
-                prob = s / otherList[k] #Nj
+                #print("unique:")
+                #print(np.unique(X[j]))
+                print(temp)
+                print(temp[k-1])
+                prob = s / X[0].size #Nj
+                print(prob)
                 prob2 = 1 - prob
+                print(prob2)
                 #temp = (prob, prob2)
                 #list_N[otherList[k]] = temp
                 ans1 = (prob + alpha) / (oneValues + kJ*alpha)
+                print(ans1)
                 ans2 = (prob2 + alpha) / (twoValues + kJ*alpha)
+                print(ans2)
                 temp1 = (ans1, ans2)
                 #list_prob[otherList[k]] = temp1
-                list_Y1[j][k] = ans1
-                list_Y2[j][k] = ans2
+                list_Y1[j][temp[k-1]] = ans1
+                list_Y2[j][temp[k-1]] = ans2
         
         #params = (thetaTuple, list_prob)
         params = (thetaTuple, list_Y1, list_Y2)

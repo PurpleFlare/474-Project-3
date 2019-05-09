@@ -65,7 +65,7 @@ class NBC(BaseEstimator):
             otherList = {}
             kJ = np.unique(X[j]).size
             #print(kJ)
-            for k in range (1, kJ):
+            for k in range (1, kJ+1):
                 prob = 0
                 prob2 = 0
                 s = 0
@@ -135,9 +135,9 @@ class NBC(BaseEstimator):
                 temp = Xtest[j][k] 
                 
                 #when attribute k has y = 1
-                val1 = params[1][k][temp][0]
+                val1 = params[1][k][temp]
                 #when attribute k has y = 2
-                val2 = params[1][k][temp][1]
+                val2 = params[2][k][temp]
                 prod1 = prod1 * val1
                 prod2 = prod2 * val2
             

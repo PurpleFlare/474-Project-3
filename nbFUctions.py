@@ -163,24 +163,47 @@ def evaluateBias(y_pred,y_sensitive):
     Output:
     di (disparateimpact): scalar value
     '''
-    #remove next line and implement from here
-    i = 0
-    #getting value with bad credit
-    y2 = 0
-    for i in range (y_pred):
-        if y_pred.at(i) == 2:
-            y2 += 1
-    #get unprivileged value from y_sensitive
-    j = 0
-    sucks2Bme = 0
-    imOKtho = 0
-    for j in (y_sensitive):
-        if y_sensitive.at(i) == 2:
-            sucks2Bme += 1
-        else:
-            imOKtho += 1
+    arrayS = np.count_nonzero(y_sensitive == 1)
+    arrayNS = np.count_nonzero(y_sensitive == 2)
     
-    di = (y2 * imOKtho) / (y2 * sucks2Bme)
+  
+    numeratorVal = 0
+    denominatorVal = 0
+    y_NotOne = arrayNS.size
+    y_One = arrayS.size
+    
+    for i in range(y_pred.size):
+        if (y_pred[i] == 2 and y_sensitive[i] != 1):
+            numeratorVal += 1
+   
+        elif (y_pred[i] == 2 and y_sensitive[i] == 1):
+            denominatorVal += 1
+            y_One += 1
+            
+    numeratorVal = numeratorVal/y_NotOne
+    denominatorVal = denominatorVal/y_One
+    
+    di = numeratorVal/denominatorVal
+    
+    
+    #remove next line and implement from here
+    #i = 0
+    #getting value with bad credit
+    #y2 = 0
+    #for i in range (y_pred):
+    #    if y_pred.at(i) == 2:
+    #        y2 += 1
+    #get unprivileged value from y_sensitive
+    #j = 0
+    #sucks2Bme = 0
+    #imOKtho = 0
+    #for j in (y_sensitive):
+    #    if y_sensitive.at(i) == 2:
+    #        sucks2Bme += 1
+    #    else:
+    #        imOKtho += 1
+    
+   # di = (y2 * imOKtho) / (y2 * sucks2Bme)
     
     #do not change the line below
     return di

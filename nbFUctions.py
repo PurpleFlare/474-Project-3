@@ -124,23 +124,25 @@ class NBC(BaseEstimator):
         #remove next line and implement from here
         j = 0
         predictions = []
-        for j in (Xtest.shape[0]):
-            y1 = params["y=1"]
-            y2 = params["y=2"]
+        for j in range (Xtest.shape[0]):
+            y1 = params[0][0]
+            y2 = params[0][1]
             
             #find given product of Xj when y = 1 and y= 2
-            temp = np.unique(Xtest[j])
-            k = 1
-            hgn = temp[0]
-            productYes = params["X= " + hgn + " | y = 1"]
-            productNo = params["X= " + hgn + " | y = 2"]
-            for k in range (temp):
-                var = temp[k]
-                productYes = productYes * params["X= " + hgn + " | y = 1"]
-                productNo = prodcuctNo * params["X= " + hgn + " | y = 2"]
+            prod1 = 1
+            prod2 = 1
+            for k in range (Xtest.shape[1]):
+                temp = Xtest[j][k] 
+                
+                #when attribute k has y = 1
+                val1 = params[1][k][temp][0]
+                #when attribute k has y = 2
+                val2 = params[1][k][temp][1]
+                prod1 = prod1 * val1
+                prod2 = prod2 * val2
             
-            forYes = (y1 * productYes) / ((y1 * productYes) + (y2 * productNo))
-            forNo = (y2 * productNo) / ((y2 *productNo) + (y1 * productYes))
+            forYes = (y1 * prod1) / ((y1 * prod1) + (y2 * prod2))
+            forNo = (y2 * prod1) / ((y2 *prod2) + (y1 * prod1))
             
             if forYes > forNo:
                 predictions.append(1)

@@ -135,6 +135,10 @@ class NBC(BaseEstimator):
                 temp = Xtest[j][k] 
                 
                 #when attribute k has y = 1
+                #when attribute k has y = 1
+                #1 means the first library
+                #k means each attribute
+                #temp is the feature of kth attribute that jth person has
                 val1 = params[1][k][temp]
                 #when attribute k has y = 2
                 val2 = params[2][k][temp]
